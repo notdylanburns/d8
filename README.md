@@ -34,6 +34,7 @@ eg for instruction 0x00, in mode 0, with flags=0b0000
 0 0003: nop
 
 pipeline:
+
     stage 1:
         0:
             - inc pc
@@ -48,6 +49,7 @@ pipeline:
 
 
 Control Lines: 23
+
     AU_WN0
     AU_WN1
     AU_WN2
@@ -77,17 +79,15 @@ Control Lines: 23
     GPR_U_DL
     GPR_CE_L
 
-mov a,#:
-    0: AU_W_N0=0, AU_W_N1=1, AU_W_N2=1,
-
-
 Constant Register:
+
     Control Lines: 3
         CR_ASSERT_MAIN: Asserts the low 8 bits of the constant register onto the main bus
         CR_LOAD_LOW: Loads the low 8 bits of the constant register from the main bus
         CR_LOAD_HIGH: Loads the high 8 bits of the constant register from the main bus
 
 Address Unit:
+
     Control Lines: 16
         W_N[3]: The device to load into
             000: none
@@ -121,6 +121,7 @@ Address Unit:
         DI_CE#: DI count enable
 
 GPR Unit:
+
     Control Lines: 9
         W_N[2]: The device to write / modify
             00: a

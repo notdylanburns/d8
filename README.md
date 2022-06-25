@@ -1,6 +1,6 @@
 # D8 Processesor Specification
 
-The D8 CPU architecture is an 8-bit architecture featuring four 8-bit general purpose registers - `a`, `b`, `c`, and `d`, a 16-bit program counter and stack pointer (`pc` and `sp` respectively). Furthermore, several other 16-bit address registers are present, namely the return address register (`ra`), the source/destination index (`si` and `di`) and the transfer register (`tx`) which exists as two 8-bit registers (`th` and `tl`), and can be used to move values between the system's main 8-bit bus and the 16-bit address bus.
+The D8 CPU architecture is an 8-bit architecture featuring four 8-bit general purpose registers - `a`, `b`, `c`, and `d`, a 16-bit program counter and stack pointer (`pc` and `sp` respectively). Furthermore, several other 16-bit address registers are present, namely the link register (`li`), the source/destination index (`si` and `di`) and the transfer register (`tx`) which exists as two 8-bit registers (`th` and `tl`), and can be used to move values between the system's main 8-bit bus and the 16-bit address bus.
 
 The CPU uses pipelining to increase efficiency. The instruction pipeline has four stages, each of which lasts four cycles of the CPU clock. On the fifth cycle, each stage of the pipeline is shifted into the next. Using this method, the CPU can effectively execute four instructions in 20 cycles, or one instruction every five cycles if they weren't parellelised.
 
@@ -10,7 +10,7 @@ The CPU uses pipelining to increase efficiency. The instruction pipeline has fou
 |-------------------|--------|------|----|----|------|
 | Program Counter   | pc     | 16   | ✓  |    | ✓    |
 | Stack Pointer     | sp     | 16   | ✓  | ✓  | ✓    |
-| Return Address    | ra     | 16   |    |    | ✓    |
+| Link Register     | li     | 16   |    |    | ✓    |
 | Source Index      | si     | 16   | ✓  | ✓  | ✓    |
 | Destination Index | di     | 16   | ✓  | ✓  | ✓    |
 | Transfer Register | tx     | 16   |    |    | ✓    |
@@ -48,7 +48,7 @@ pipeline:
         3:
 
 
-Control Lines: 23
+### Control Lines: 23
 
     AU_WN0
     AU_WN1
@@ -61,7 +61,7 @@ Control Lines: 23
     PC_CE#
     SP_U/D#
     SP_CE#
-    RA_CE#
+    LI_CE#
     SI_U/D#
     SI_CE#
     DI_U/D#
@@ -79,7 +79,7 @@ Control Lines: 23
     GPR_U_DL
     GPR_CE_L
 
-Constant Register:
+### Constant Register:
 
     Control Lines: 3
         CR_ASSERT_MAIN: Asserts the low 8 bits of the constant register onto the main bus
@@ -94,7 +94,7 @@ Address Unit:
             001: none
             010: di
             011: si
-            100: ra
+            100: li
             101: sp
             110: pc
             111: tx
@@ -104,7 +104,7 @@ Address Unit:
             001: const16
             010: di
             011: si
-            100: ra
+            100: li
             101: sp
             110: pc
             111: tx
@@ -114,13 +114,13 @@ Address Unit:
         PC_CE#: PC count enable
         SP_U/D#: Sets the count direction of SP
         SP_CE#: SP count enable
-        RA_CE#: RA count enable
+        LI_CE#: LI count enable
         SI_U/D#: Sets the count direction of SI
         SI_CE#: SI count enable
         DI_U/D#: Sets the count direction of DI
         DI_CE#: DI count enable
 
-GPR Unit:
+### GPR Unit:
 
     Control Lines: 9
         W_N[2]: The device to write / modify
